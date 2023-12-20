@@ -56,10 +56,10 @@ print(df_cDAG)
 write.csv(df_cDAG, file = paste0(path, dataset_name, '_DAG.csv'), row.names = TRUE)
 
 
-# setwd('/Users/jessezhou/Desktop/rcGNF') path to the package
+# setwd('/Users/jessezhou/Desktop/RcGNF') # install RcGNF first, set the path to the package
 # devtools::load_all()
 
-library(rcGNF)
+library(RcGNF)
 
 # Specify process_args
 process_args <- list(

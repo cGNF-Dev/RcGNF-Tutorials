@@ -39,7 +39,6 @@ print(df_cDAG)
 
 write.csv(df_cDAG, file.path(path, paste0(dataset_name, '_DAG.csv')), row.names = TRUE)
 
-# devtools::install_github("cGNF-Dev/RcGNF")  # install the package first
 
 library(RcGNF)
 

@@ -7,10 +7,12 @@ dataset_name <- 'ATE_20k'
 if (!dir.exists(path)) {
   dir.create(path, recursive = TRUE)
 }
+# Checks if a directory with the name 'path' exists.
+# If not, creates a new directory with this name. This is where the logs and model weights will be saved.
 
-# Data Simulation
-obs <- 20000
-set.seed(2813308004)
+## DATA SIMULATION
+obs <- 20000 # Sets the number of observations.
+set.seed(2813308004) # Sets the seed for simulation.
 
 A <- rbinom(n = obs, size = 1, prob = 0.5)
 Y <- ifelse(A == 1, rbinom(n = obs, size = 1, prob = 0.6), rbinom(n = obs, size = 1, prob = 0.4))
@@ -19,7 +21,7 @@ df <- data.frame(A = A, Y = Y)
 df_filename <- file.path(path, paste0(dataset_name, '.csv'))
 write.csv(df, df_filename, row.names = FALSE)
 
-# DAG Specification
+## DAG SPECIFICATION
 library(igraph)
 
 simDAG <- graph_from_edgelist(matrix(c("A", "Y"), ncol = 2, byrow = TRUE), directed = TRUE)
@@ -41,6 +43,7 @@ write.csv(df_cDAG, file.path(path, paste0(dataset_name, '_DAG.csv')), row.names 
 
 library(RcGNF)
 
+## DATA PREPROCESSING
 process(path = path,
         dataset_name = dataset_name,
         dag_name = paste0(dataset_name, '_DAG'),
@@ -49,6 +52,7 @@ process(path = path,
         cat_var = c("A", "Y"),
         seed = NULL)
 
+## MODEL TRAINING
 train(path = path,
       dataset_name = dataset_name,
       model_name = "20k",
@@ -62,6 +66,7 @@ train(path = path,
       nb_estop = 50,
       val_freq = 1)
 
+## POTENTIAL OUTCOME ESTIMATION
 sim(path = path,
     dataset_name = dataset_name,
     model_name = "20k",

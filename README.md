@@ -410,7 +410,7 @@ C &\sim \text{Binomial}(0.4) \\
 \\
 \epsilon_A &\sim \text{Normal}(0, 1) \\
 \epsilon_M &\sim \text{Logistic}(0, 1) \\
-\epsilon_Y &\sim \text{Laplace}(0, 1) \\
+\epsilon_Y &\sim \text{Logistic}(0, 1) \\
 \\
 A &= 0.2 \cdot C + \epsilon_A \\
 M &= 0.25 \cdot A + \epsilon_M \\
@@ -474,7 +474,7 @@ C &\sim \text{Binomial}(0.5) \\
 \\
 \epsilon_A &\sim \text{Normal}(0, 1) \\
 \epsilon_L &\sim \text{Logistic}(0, 1) \\
-\epsilon_M &\sim \text{Laplace}(0, 1) \\
+\epsilon_M &\sim \text{Logistic}(0, 1) \\
 \epsilon_Y &\sim \text{Normal}(0, 1) \\
 \\
 A &= 0.2 \cdot C + \epsilon_A \\
@@ -556,8 +556,8 @@ U_1 &\sim \text{Normal}(1, 2) \\
 U_2 &\sim \text{Normal}(0, 3) \\
 \\
 \epsilon_A &\sim \text{Normal}(0, 1) + 0.3 \cdot U_1\\
-\epsilon_M &\sim \text{logistic}(0, 1) + 0.3 \cdot U_2\\
-\epsilon_Y &\sim \text{Laplace}(0, 1) + 0.25 \cdot U_1 + 0.25 \cdot U_2\\
+\epsilon_M &\sim \text{Logistic}(0, 1) + 0.3 \cdot U_2\\
+\epsilon_Y &\sim \text{Logistic}(0, 1) + 0.25 \cdot U_1 + 0.25 \cdot U_2\\
 \\
 A &= 0.2 \cdot C + \epsilon_A \\
 M &= 0.25 \cdot A + \epsilon_M \\

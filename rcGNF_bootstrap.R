@@ -56,8 +56,8 @@ print(df_cDAG)
 write.csv(df_cDAG, file = paste0(path, dataset_name, '_DAG.csv'), row.names = TRUE)
 
 
-# setwd('/Users/jessezhou/Desktop/RcGNF') # install RcGNF first, set the path to the package
-# devtools::load_all()
+setwd('/Users/jessezhou/Desktop/RcGNF') # install the package first
+devtools::load_all()
 
 library(RcGNF)
 

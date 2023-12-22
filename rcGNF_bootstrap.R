@@ -55,9 +55,7 @@ print(df_cDAG)
 # Write the adjacency matrix to a CSV file
 write.csv(df_cDAG, file = paste0(path, dataset_name, '_DAG.csv'), row.names = TRUE)
 
-
-setwd('/Users/jessezhou/Desktop/RcGNF') # install the package first
-devtools::load_all()
+# devtools::install_github("cGNF-Dev/RcGNF")  # install the package first
 
 library(RcGNF)
 

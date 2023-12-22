@@ -1,8 +1,8 @@
 # Setting up environment and paths
-base_path <- '/Users/jessezhou/Desktop/cGNF_test/rcGNF/'
-folder <- '_ATE'
-path <- file.path(base_path, folder, '')
-dataset_name <- 'ATE_20k'
+base_path <- '/Users/jessezhou/Desktop/cGNF_test/rcGNF/'  # Define the base path for file operations.
+folder <- '_ATE'  # Define the folder where files will be stored.
+path <- file.path(base_path, folder, '')  # Combines the base path and folder into a complete path.
+dataset_name <- 'ATE_20k'  # Define the name of the dataset.
 
 if (!dir.exists(path)) {
   dir.create(path, recursive = TRUE)
@@ -11,8 +11,8 @@ if (!dir.exists(path)) {
 # If not, creates a new directory with this name. This is where the logs and model weights will be saved.
 
 ## DATA SIMULATION
-obs <- 20000 # Sets the number of observations.
-set.seed(2813308004) # Sets the seed for simulation.
+obs <- 20000  # Sets the number of observations.
+set.seed(2813308004)  # Sets the seed for simulation.
 
 A <- rbinom(n = obs, size = 1, prob = 0.5)
 Y <- ifelse(A == 1, rbinom(n = obs, size = 1, prob = 0.6), rbinom(n = obs, size = 1, prob = 0.4))

@@ -1,5 +1,3 @@
-# example
-
 # Setting up environment and paths
 base_path <- '/Users/jessezhou/Desktop/cGNF_test/rcGNF/'
 folder <- '_ATE'

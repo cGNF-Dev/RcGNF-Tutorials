@@ -1,22 +1,19 @@
-
-# Setting up environment and paths
-base_path <- '/Users/jessezhou/Desktop/cGNF_test/rcGNF/'
-folder <- 'ATE_8k'
-path <- file.path(base_path, folder, '')
-dataset_name <- 'ATE_8k'
+base_path <- '/Users/jessezhou/Desktop/cGNF_test/rcGNF/' # Define the base path for file operations.
+folder <- '_PSE'  # Define the folder where files will be stored.
+path <- file.path(base_path, folder, '')  # Combines the base path and folder into a complete path.
+dataset_name <- 'PSE_20k'  # Define the name of the dataset.
 
 if (!dir.exists(path)) {
   dir.create(path, recursive = TRUE)
 }
+# Checks if a directory with the name 'path' exists.
+# If not, creates a new directory with this name. This is where the logs and model weights will be saved.
 
-# Set the number of observations
-obs <- 8000
+## DATA SIMULATION
+obs <- 20000  # Sets the number of observations.
+set.seed(2813308004)  # Sets the seed for simulation.
 
-# Set seed for reproducibility
-set.seed(1001)
-
-# Simulate data
-C <- rbinom(n = obs, size = 1, prob = 0.5)
+C <- rbinom(n = obs, size = 1, prob = 0.4)
 
 epsilon_A <- rnorm(obs, 0, 1)
 epsilon_L <- rlogis(obs, 0, 1)
@@ -24,48 +21,41 @@ epsilon_M <- rlogis(obs, 0, 1)
 epsilon_Y <- rnorm(obs, 0, 1)
 
 A <- 0.2 * C + epsilon_A
-L <- 0.1 * A + 0.2 * C + epsilon_L
+L <- 0.1 * A + 0.2 * C + epsilon_M
 M <- 0.1 * A + 0.1 * C + 0.2 * L + epsilon_M
-Y <- 0.1 * A + 0.1 * C + 0.2 * M + 0.2 * L + epsilon_Y * (1 + 0.2 * C)
+Y <- 0.1 * A + 0.1 * C + 0.2 * M + 0.2 * L + epsilon_Y
 
-# Create a dataframe
 df <- data.frame(C = C, A = A, L = L, M = M, Y = Y)
+df_filename <- file.path(path, paste0(dataset_name, '.csv'))
+write.csv(df, df_filename, row.names = FALSE)
 
-# Write the dataframe to a CSV file
-write.csv(df, file = paste0(path, dataset_name, '.csv'), row.names = FALSE)
-
-# DAG Specification
+## DAG SPECIFICATION
 library(igraph)
 
-# Create the DAG
-simDAG <- graph_from_edgelist(matrix(c("C", "A", "C", "L", "C", "M", "C", "Y", "A", "L", "A", "M", "A", "Y", "L", "M", "L", "Y", "M", "Y"), byrow = TRUE, ncol = 2), directed = TRUE)
-
-# Plot the DAG
+simDAG <- graph_from_edgelist(matrix(c("C", "A", "C", "L", "C", "M", "C", "Y", "A", "L", "A", "M", "A", "Y", "L", "M", "L", "Y", "M", "Y"), ncol = 2, byrow = TRUE), directed = TRUE)
 plot(simDAG)
-
 
 # Convert the adjacency matrix to a base R matrix
 adj_matrix <- as.matrix(as_adjacency_matrix(simDAG, type = "both", attr = NULL, sparse = FALSE))
 df_cDAG <- as.data.frame(adj_matrix)
 
-# Print the adjacency matrix
+# Set the row names
+rownames(df_cDAG) <- V(simDAG)$name
+
 print("------- Adjacency Matrix -------")
 print(df_cDAG)
 
-# Write the adjacency matrix to a CSV file
-write.csv(df_cDAG, file = paste0(path, dataset_name, '_DAG.csv'), row.names = TRUE)
+write.csv(df_cDAG, file.path(path, paste0(dataset_name, '_DAG.csv')), row.names = TRUE)
 
-# devtools::install_github("cGNF-Dev/RcGNF")  # install the package first
 
 library(RcGNF)
 
-# Specify process_args
+## FUNCTION HYPER-PARAMETER SPECIFICATION
 process_args <- list(
   test_size = 0.2,
   cat_var = c('C')
 )
 
-# Specify train_args
 train_args <- list(
   model_name = '20k',
   trn_batch_size = 128,
@@ -79,7 +69,6 @@ train_args <- list(
   int_net = c(50, 40, 30, 20, 10)
 )
 
-# Specify sim_args1
 sim_args1 <- list(
   model_name = '20k',
   treatment = 'A',
@@ -89,7 +78,6 @@ sim_args1 <- list(
   inv_datafile_name = 'med'
 )
 
-# Specify sim_args2
 sim_args2 <- list(
   model_name = '20k',
   treatment = 'A',
@@ -99,17 +87,50 @@ sim_args2 <- list(
   inv_datafile_name = 'pse'
 )
 
-# Combine sim_args1 and sim_args2 into a list for sim_args_list
-sim_args_list <- list(sim_args1, sim_args2)
+## BOOTSTRAP INFERENCE
+final_result <- bootstrap(n_iterations = 10,
+                          num_cores_reserve = 6,
+                          base_path = path,
+                          folder_name = 'bootstrap',
+                          dataset_name = dataset_name,
+                          dag_name = paste0(dataset_name, '_DAG'),
+                          process_args = process_args,
+                          train_args = train_args,
+                          sim_args_list = list(sim_args1, sim_args2))
 
-# Bootstrapping
 
-bootstrap(n_iterations = 10,
-          num_cores_reserve = 6,
-          base_path = path,
-          folder_name = 'bootstrap',
-          dataset_name = dataset_name,
-          dag_name = paste0(dataset_name, '_DAG'),
-          process_args = process_args,
-          train_args = train_args,
-          sim_args_list = sim_args_list)
+library(dplyr)
+
+## EFFECT ESTIMATION
+final_result$ATE_A_Y <- final_result$E.Y.A.1.. - final_result$E.Y.A.0..
+final_result$PSE_A_Y <- final_result$E.Y.A.1..L.A.0...M.A.0.. - final_result$E.Y.A.0..
+final_result$PSE_A_L_Y <- final_result$E.Y.A.1.. - final_result$E.Y.A.1..L.A.0...
+final_result$PSE_A_M_Y <- final_result$E.Y.A.1..L.A.0... - final_result$E.Y.A.1..L.A.0...M.A.0..
+final_result$ATE_A_M <- final_result$E.M.A.1.. - final_result$E.M.A.0..
+final_result$NDE <- final_result$E.M.A.1..L.A.0... - final_result$E.M.A.0..
+final_result$NIE <- final_result$E.M.A.1.. - final_result$E.M.A.1..L.A.0...
+
+# Create a new dataframe with the calculated columns
+final_results_df <- final_result[, c("ATE_A_Y", "PSE_A_Y", "PSE_A_L_Y", "PSE_A_M_Y", "ATE_A_M", "NDE", "NIE")]
+
+# Rename columns
+colnames(final_results_df) <- c("ATE (A->Y)", "PSE (A->Y)", "PSE (A->L->Y)", "PSE (A->M->Y)", "ATE (A->M)", "NDE", "NIE")
+
+## CONFIDENCE INTERVAL ESTIMATION
+percentiles <- list()
+percentile_values <- c(10, 90)
+outcome_columns <- names(final_results_df)
+
+for (column in outcome_columns) {
+  percentiles[[column]] <- sapply(percentile_values, function(p) quantile(final_results_df[[column]], probs = p / 100, na.rm = TRUE))
+}
+
+# Convert the list of percentiles to a dataframe
+percentiles_df <- do.call(cbind, percentiles)
+
+# Name the rows with percentile values
+row.names(percentiles_df) <- c("10th percentile", "90th percentile")
+
+# Save the percentiles to a new CSV file
+percentiles_csv_path <- paste0(path, dataset_name, "_80%CI.csv")
+write.csv(percentiles_df, percentiles_csv_path, row.names = TRUE)

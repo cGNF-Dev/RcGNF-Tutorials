@@ -104,7 +104,6 @@ sim_args_list <- list(sim_args1, sim_args2)
 
 # Bootstrapping
 
-
 bootstrap(n_iterations = 10,
           num_cores_reserve = 6,
           base_path = path,

@@ -19,8 +19,8 @@ C <- rbinom(n = obs, size = 1, prob = 0.4)
 U1 = rnorml(obs, 1, 2) # U1 affects A and Y
 U2 = rnorml(obs, 0, 3)  # U2 affects M and Y
 
-epsilon_A <- rnorm(obs, 0, 1) + 0.3 * U1
-epsilon_M <- rlogis(obs, 0, 1) + 0.3 * U2
+epsilon_A <- rnorm(obs, 0, 1) + 0.4 * U1
+epsilon_M <- rlogis(obs, 0, 1) + 0.4 * U2
 epsilon_Y <- rlogis(obs, 0, 1) + 0.25 * U1 + 0.25 * U2å
 
 A <- 0.2 * C + epsilon_A

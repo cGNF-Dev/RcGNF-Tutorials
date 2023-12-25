@@ -564,8 +564,8 @@ C &\sim \text{Binomial}(0.4) \\
 U_1 &\sim \text{Normal}(1, 2) \\
 U_2 &\sim \text{Normal}(0, 3) \\
 \\
-\epsilon_A &\sim \text{Normal}(0, 1) + 0.3 \cdot U_1\\
-\epsilon_M &\sim \text{Logistic}(0, 1) + 0.3 \cdot U_2\\
+\epsilon_A &\sim \text{Normal}(0, 1) + 0.4 \cdot U_1\\
+\epsilon_M &\sim \text{Logistic}(0, 1) + 0.4 \cdot U_2\\
 \epsilon_Y &\sim \text{Logistic}(0, 1) + 0.25 \cdot U_1 + 0.25 \cdot U_2\\
 \\
 A &= 0.2 \cdot C + \epsilon_A \\

@@ -11,7 +11,7 @@ if (!dir.exists(path)) {
 
 ## DATA SIMULATION
 obs <- 20000  # Sets the number of observations.
-set.seed(2813308004)  # Sets the seed for simulation.
+set.seed(2813)  # Sets the seed for simulation.
 
 C <- rbinom(n = obs, size = 1, prob = 0.4)
 

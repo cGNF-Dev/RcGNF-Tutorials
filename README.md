@@ -53,9 +53,20 @@ This guide will help you install and utilize `RcGNF` within an R environment.
    ```R
    devtools::install_github("cGNF-Dev/RcGNF")
    ```
-   If prompted to specify the Python path during installation, type which python in the terminal (on macOS/Linux) or where python in the Command Prompt (on Windows) to retrieve it.
    
-4. **Load RcGNF**:
+   If you encounter the error message `Python installation not found in common locations. Please set the RCGNF_PYTHON_PATH environment variable to your Python installation and reload the package`, proceed as follows:
+
+   1. Find the Python path by typing `which python` (macOS/Linux) or `where python` (Windows) in the terminal/Command Prompt.
+
+   2. Set the variable in R/RStudio:
+
+   ```R
+   Sys.setenv(RCGNF_PYTHON_PATH = "/your/python/path")
+   ```
+   
+   3. Reinstall the RcGNF package.
+   
+5. **Load RcGNF**:
 
    Once installed, load the package using:
 

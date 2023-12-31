@@ -54,10 +54,10 @@ library(RcGNF)
 
 ## DATA PREPROCESSING
 # Specify sensitivity correlation strength
-corr_strength_1=dict(list(tuple("A", "Y") = 0.15, tuple("M", "Y") = 0.2))
+corr_strength_1 <- list(`("A", "Y")` = 0.15, `("M", "Y")` = 0.2)
 # For real-world data, always test on a range of sensitivity correlations
-# corr_strength_2=dict(list(tuple("A", "Y") = 0.2, tuple("M", "Y") = 0.15))
-# corr_strength_3=...
+# corr_strength_2 <- list(`("A", "Y")` = 0.2, `("M", "Y")` = 0.15)
+# corr_strength_3 <-...
 
 process(path = path,
         dataset_name = dataset_name,
@@ -65,7 +65,7 @@ process(path = path,
         sens_corr=corr_strength_1,
         test_size = 0.2,
         cat_var = c("C"),
-        seed = NULL)
+        seed = 111)
 
 ## MODEL TRAINING
 train(path = path,

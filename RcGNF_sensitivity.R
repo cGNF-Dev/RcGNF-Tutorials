@@ -19,9 +19,9 @@ C <- rbinom(n = obs, size = 1, prob = 0.4)
 U1 = rnorm(obs, 0, 3) # U1 affects A and Y
 U2 = rnorm(obs, 0, 3)  # U2 affects M and Y
 
-epsilon_A <- rnorm(obs, 0, 1) + 0.3 * U1
-epsilon_M <- rlogis(obs, 0, 1) + 0.35 * U2
-epsilon_Y <- rlogis(obs, 0, 1) + 0.2 * U1 + 0.2 * U2
+epsilon_A <- rnorm(obs, 0, 1) + 0.2 * U1
+epsilon_M <- rlogis(obs, 0, 1) + 0.4 * U2
+epsilon_Y <- rlogis(obs, 0, 1) + 0.2 * U1 + 0.25 * U2
 
 A <- 0.2 * C + epsilon_A
 M <- 0.25 * A + epsilon_M
@@ -54,9 +54,9 @@ library(RcGNF)
 
 ## DATA PREPROCESSING
 # Specify sensitivity correlation strength
-corr_strength_1 <- list(`("A", "Y")` = 0.2, `("M", "Y")` = 0.15)
+corr_strength_1 <- list(`("A", "Y")` = 0.15, `("M", "Y")` = 0.2)
 # For real-world data, always test on a range of sensitivity correlations
-# corr_strength_2 <- list(`("A", "Y")` = 0.15, `("M", "Y")` = 0.2)
+# corr_strength_2 <- list(`("A", "Y")` = 0.2, `("M", "Y")` = 0.15)
 # corr_strength_3 <-...
 
 process(path = path,

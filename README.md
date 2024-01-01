@@ -181,7 +181,7 @@ Additionally, a **`bootstrap`** function is provided to facilitate parallel exec
         dag_name =  'you_adj_mat_name',  # Name of the adjacency matrix (DAG) to be used
         test_size = 0.2,  # Proportion of data used for the validation set
         cat_var = c('X', 'Y'),  # List of categorical variables
-        sens_corr = list(`("A", "Y")` = 0.15, `("M", "Y")` = 0.2), # Vector of sensitivity parameters (i.e., normalized disturbance correlations)
+        sens_corr = list(`("A", "Y")` = 0.2, `("M", "Y")` = 0.15), # Vector of sensitivity parameters (i.e., normalized disturbance correlations)
         seed = NULL  # Seed for reproducibility
     )
    ```
@@ -566,18 +566,18 @@ _Note_: for conditional path-specific effect estimates, adjust the `moderator=No
 ### Conducting a Sensitivity Analysis
 (See **`RcGNF_sensitivity.py`** for detailed implementation)
 
-Based on **`RcGNF_ND(I)E.py`**, refine the DGP to simulate correlated error terms $\epsilon_A$ and $\epsilon_Y$ with $\rho_{\epsilon_A,\epsilon_Y} \approx 0.15$ and $\epsilon_M$ and $\epsilon_Y$ with $\rho_{\epsilon_M,\epsilon_Y} \approx 0.2$, induced by unobserved confounders $U_1$ and $U_2$:
+Based on **`RcGNF_ND(I)E.py`**, refine the DGP to simulate correlated error terms $\epsilon_A$ and $\epsilon_Y$ with $\rho_{\epsilon_A,\epsilon_Y} \approx 0.2$ and $\epsilon_M$ and $\epsilon_Y$ with $\rho_{\epsilon_M,\epsilon_Y} \approx 0.15$, induced by unobserved confounders $U_1$ and $U_2$:
 
 $$
 \begin{align*}
 C &\sim \text{Binomial}(0.4) \\
 \\
-U_1 &\sim \text{Normal}(1, 2) \\
+U_1 &\sim \text{Normal}(0, 3) \\
 U_2 &\sim \text{Normal}(0, 3) \\
 \\
-\epsilon_A &\sim \text{Normal}(0, 1) + 0.4 \cdot U_1\\
-\epsilon_M &\sim \text{Logistic}(0, 1) + 0.4 \cdot U_2\\
-\epsilon_Y &\sim \text{Logistic}(0, 1) + 0.25 \cdot U_1 + 0.25 \cdot U_2\\
+\epsilon_A &\sim \text{Normal}(0, 1) + 0.3 \cdot U_1\\
+\epsilon_M &\sim \text{Logistic}(0, 1) + 0.35 \cdot U_2\\
+\epsilon_Y &\sim \text{Logistic}(0, 1) + 0.2 \cdot U_1 + 0.2 \cdot U_2\\
 \\
 A &= 0.2 \cdot C + \epsilon_A \\
 M &= 0.25 \cdot A + \epsilon_M \\

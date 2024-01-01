@@ -21,7 +21,7 @@ epsilon_Y <- rlogis(obs, 0, 1)
 
 A <- 0.2 * C + epsilon_A
 M <- 0.25 * A + epsilon_M
-Y <- 0.2 * A + 0.4 * M + 0.2 * C + epsilon_Y
+Y <- 0.1 * A + 0.4 * M + 0.2 * C + epsilon_Y
 
 df <- data.frame(C = C, A = A, M = M, Y = Y)
 df_filename <- file.path(path, paste0(dataset_name, '.csv'))

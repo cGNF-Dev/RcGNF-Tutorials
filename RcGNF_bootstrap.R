@@ -1,5 +1,5 @@
-base_path <- '/Users/jessezhou/Desktop/cGNF_test/rcGNF/' # Define the base path for file operations.
-folder <- '_PSE'  # Define the folder where files will be stored.
+base_path <- '/Users/jessezhou/Desktop/cGNF_test/rcGNF' # Define the base path for file operations.
+folder <- '_PSE/'  # Define the folder where files will be stored.
 path <- file.path(base_path, folder, '')  # Combines the base path and folder into a complete path.
 dataset_name <- 'PSE_20k'  # Define the name of the dataset.
 

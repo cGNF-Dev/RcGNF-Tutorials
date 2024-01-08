@@ -74,6 +74,10 @@ This guide will help you install and utilize `RcGNF` within an R environment.
    library(RcGNF)
    ```
 
+   *Note for Windows Users*:
+   
+   - Currently, the RcGNF package is only functional within RStudio on Windows environments. Running it directly in R may lead to errors. We recommend using RStudio for a seamless experience with RcGNF on Windows.
+
 ---
 
 
